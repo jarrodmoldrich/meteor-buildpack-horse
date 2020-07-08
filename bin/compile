@@ -166,7 +166,9 @@ chmod a+x "$NODE"
 PATH="$METEOR_DIR/.meteor:`dirname $METEOR_NPM`:$COMPILE_DIR/bin:$PATH"
 
 echo "-----> Using node: `$NODE --version`"
+echo "                   @$NODE"
 echo "----->    and npm: `$METEOR_NPM --version`"
+echo "                   @$METEOR_NPM"
 
 # If we use npm on root, run npm install.  Don't use `--production` here, as we
 # may need devDependencies (e.g. webpack) in order to build the meteor app.
