@@ -140,17 +140,18 @@ if [ -z "$SERVER_ONLY_FLAG" ]; then
   echo "-----> Moving on."
 fi
 
-# Identify the npm/node to use. We need to copy the node binary out to get the
-# correct version in the built slug (e.g. 0.10.x for Meteor<1.4, 4.x for
-# Meteor>=1.4).  We can't copy the whole meteor world because that's too large
-# (Issue #125).
+# HACK: We're using latest npm to install our dependencies instead of using the
+#       distro supplied with Meteor - See prior revision in git for details
+#
+#       Depends on `https://github.com/heroku/heroku-buildpack-apt` specified
+#       before this buildpack in the Heroku settings.  The 'apt-get'
+#       dependencies (such as `node` and `npm` are added to the `Aptfile`
+#       in the root directory of the application repo.
+#
+METEOR_NODE="node"
+METEOR-NPM="npm"
 
-# Query node for its own path. As long as the Meteor version we got from
-# install.meteor.com is >=1.3, "meteor node" is available, even if the target
-# release predates that feature.
-METEOR_NODE=`METEOR node -e "process.stdout.write(process.execPath)"`
-# Assume npm is in the same dir as node.
-METEOR_NPM="`dirname "$METEOR_NODE"`/npm"
+
 
 if [ -z "$METEOR_NPM" ] || [ -z "$METEOR_NODE" ] ; then
   echo "FATAL: Can't find npm/node within meteor bundle. This is a bug. Please open an issue at https://github.com/AdmitHub/meteor-buildpack-horse.";
